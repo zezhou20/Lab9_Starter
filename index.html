@@ -95,13 +95,96 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          console.error("Invalid syntax in operation!");
+          output.innerHTML = "Error: Invalid operation!";
+        } else {
+          throw e; // re-throw the error unchanged
+        }
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        switch (index) {
+          case 0:
+            console.log("Console Log");
+            break;
+          case 1:
+            console.error("Console Error");
+            break;
+          case 2:
+            console.count("Console Count");
+            break;
+          case 3:
+            console.warn("Console Warn");
+            break;
+          case 4:
+            console.assert(false, "Console Assert");
+            break;
+          case 5:
+            console.clear();
+            break;
+          case 6:
+            console.dir(document.querySelector('button'));
+            break;
+          case 7:
+            console.dirxml(document.querySelector('button'));
+            break;
+          case 8:
+            console.group();
+            console.log('Starting Group');
+            break;
+          case 9:
+            console.groupEnd();
+            console.log('Ending Group');
+            break;
+          case 10:
+            console.table({ name: 'Test', value: 10 });
+            break;
+          case 11:
+            console.time('Timer');
+            break;
+          case 12:
+            console.timeEnd('Timer');
+            break;
+          case 13:
+            console.trace("Trace");
+            break;
+          case 14:
+            throw new Error('Global Error');
+        }
+      });
+    });
+
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
+
+    try {
+      throw new CustomError("This is a custom error");
+    } catch (e) {
+      console.log(e.name); // "CustomError"
+      console.log(e.message); // "This is a custom error"
+    }
+
+    // Global error handler
+    window.onerror = function (message, source, lineno, colno, error) {
+      console.log(`An error occurred: ${message}, source: ${source}, line: ${lineno}, column: ${colno}`);
+      // Here you would send the error message to a server using fetch or XMLHttpRequest
+      // You can use services like TrackJS to monitor these errors.
+    };
+
   </script>
 </body>
 
